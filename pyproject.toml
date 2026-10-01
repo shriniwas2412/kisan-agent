@@ -1,0 +1,32 @@
+[project]
+name = "kisan-agent"
+version = "0.1.0"
+description = "Farmer assistant agent: leaf-disease diagnosis + mandi prices + weather, in Hindi, on Telegram."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Shriniwas Maheshwari" }]
+dependencies = [
+  "anthropic>=1.0,<2",
+  "mandi-mcp",  # install from ../mandi-mcp (or git+https://github.com/Shriniwas2412/mandi-mcp)
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "pyyaml", "onnx"]
+vision = ["onnxruntime>=1.18", "pillow", "numpy"]
+bot = ["python-telegram-bot>=21"]
+train = ["torch>=2.3", "torchvision>=0.18", "onnx"]
+
+[project.scripts]
+kisan = "kisan_agent.cli:main"
+kisan-bot = "kisan_agent.bot:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
