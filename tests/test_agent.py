@@ -3,7 +3,7 @@
 import json
 from types import SimpleNamespace as NS
 
-from kisan_agent import tools
+from kisan_agent import tools, vision
 from kisan_agent.agent import KisanAgent
 
 
@@ -88,6 +88,7 @@ async def test_unknown_tool_and_missing_image_return_errors():
     assert "No image" in await tools.run_tool("diagnose_leaf", {"image_id": "x"}, {})
 
 
-async def test_leaf_without_model_is_honest():
+async def test_leaf_without_model_is_honest(tmp_path, monkeypatch):
+    monkeypatch.setattr(vision, "MODEL_DIR", tmp_path)  # empty dir, regardless of local models/
     out = json.loads(await tools.run_tool("diagnose_leaf", {"image_id": "img1"}, {"img1": b"fake"}))
     assert out["available"] is False
